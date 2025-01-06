@@ -1,27 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import api from "../../services/api";
 
 function BuscarPaciente() {
   const [filtros, setFiltros] = useState({ sexo: "", fechaIngreso: "", enfermedad: "" });
   const [resultados, setResultados] = useState([]);
+  const navigate = useNavigate();
+  const location = useLocation(); 
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const sexo = params.get('sexo');
+    const fechaIngreso = params.get('fechaIngreso');
+    const enfermedad = params.get('enfermedad');
+
+    if (sexo || fechaIngreso || enfermedad) {
+      api.get("/pacientes/search", { params: { sexo, fechaIngreso, enfermedad } })
+        .then(response => setResultados(response.data))
+        .catch(() => alert("Error en la búsqueda."));
+    }
+  }, [location]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFiltros({ ...filtros, [name]: value });
   };
 
-  const handleBuscar = async () => {
-    if (!filtros.sexo && !filtros.fechaIngreso && !filtros.enfermedad) {
-      alert("Por favor, ingrese al menos un filtro.");
-      return;
-    }
-  
-    try {
-      const response = await api.get("/pacientes/search", { params: filtros });
-      setResultados(response.data);
-    } catch (error) {
-      alert("Error en la búsqueda.");
-    }
+  const handleBuscar = () => {
+    const queryParams = new URLSearchParams(filtros).toString();
+    navigate(`/paciente/buscar/resultados?${queryParams}`);
   };
 
   return (
@@ -41,14 +48,14 @@ function BuscarPaciente() {
 
       <h2>Resultados</h2>
       {resultados.length === 0 ? (
-          <p>No se encontraron pacientes.</p>
-        ) : (
-          <ul>
-            {resultados.map((paciente) => (
-              <li key={paciente._id}>{paciente.nombre}</li>
-            ))}
-          </ul>
-        )}
+        <p>No se encontraron pacientes.</p>
+      ) : (
+        <ul>
+          {resultados.map((paciente) => (
+            <li key={paciente._id}>{paciente.nombre}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

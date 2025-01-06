@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Cambié Switch por Routes y Redirect por Navigate
 import Nav from './components/Nav';
 import Inicio from './components/Inicio';
 import AgregarPaciente from './components/paciente/AgregarPaciente';
@@ -13,24 +13,17 @@ function App() {
   return (
     <Router>
       <Nav />
-      <Switch>
-        <Route exact path="/" component={Inicio} />
-        <Route exact path="/inicio" component={Inicio} />
-        <Route exact path="/paciente/nuevo" component={AgregarPaciente} />
-        <Route exact path="/paciente/actualizar/:id" component={ActualizarPaciente} />
-        <Route exact path="/paciente/detalle/:id" component={DetallePaciente} />
-        <Route exact path="/paciente/listar" component={ListarPaciente} />
-        <Route exact path="/paciente/buscar/:search" component={BuscarPaciente} />
-        <Route
-          exact
-          path="/redirect/:search"
-          render={(props) => {
-            const search = props.match.params.search;
-            return <Redirect to={`/paciente/buscar/${search}`} />;
-          }}
-        />
-        <Route component={Error} />
-      </Switch>
+      <Routes>
+        <Route exact path="/" element={<Inicio />} />
+        <Route exact path="/inicio" element={<Inicio />} />
+        <Route exact path="/paciente/nuevo" element={<AgregarPaciente />} />
+        <Route exact path="/paciente/actualizar/:id" element={<ActualizarPaciente />} />
+        <Route exact path="/paciente/detalle/:id" element={<DetallePaciente />} />
+        <Route exact path="/paciente/listar" element={<ListarPaciente />} />
+        <Route exact path="/paciente/buscar" element={<BuscarPaciente />} />
+        <Route exact path="/paciente/buscar/resultados" element={<BuscarPaciente />} />
+        <Route path="*" element={<Error />} /> {/* Usamos path="*" para manejar rutas no encontradas */}
+      </Routes>
     </Router>
   );
 }

@@ -37,6 +37,7 @@ function ListarPacientes() {
       <table>
         <thead>
           <tr>
+            <th>Foto</th>
             <th>RUT</th>
             <th>Nombre</th>
             <th>Edad</th>
@@ -57,7 +58,7 @@ function ListarPacientes() {
               <td>{paciente.sexo}</td>
               <td>{paciente.enfermedad}</td>
               <td>
-                <Link to={`/pacientes/editar/${paciente._id}`} className="btn btn-warning">
+                <Link to={`/paciente/actualizar/${paciente._id}`} className="btn btn-warning">
                   Editar
                 </Link>
                 <button
