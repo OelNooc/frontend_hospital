@@ -22,7 +22,7 @@ function App() {
         <Route exact path="/paciente/listar" element={<ListarPaciente />} />
         <Route exact path="/paciente/buscar" element={<BuscarPaciente />} />
         <Route exact path="/paciente/buscar/resultados" element={<BuscarPaciente />} />
-        <Route path="*" element={<Error />} /> {/* Usamos path="*" para manejar rutas no encontradas */}
+        <Route path="*" element={<Error />} /> 
       </Routes>
     </Router>
   );
